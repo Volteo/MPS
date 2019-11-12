@@ -8,7 +8,7 @@ import * as path from "path";
 import { logger as log } from "./utils/logger";
 import { mpsMicroservice } from "./mpsMicroservice";
 import { configType, certificatesType } from "./models/Config";
-import dataBase from "./utils/db/snow-db";
+import {dataBase} from "./utils/db/db";
 import localDB from "./utils/db/local-db"
 import snowDB from "./utils/db/snow-db"
 import { certificates } from "./utils/certificates";

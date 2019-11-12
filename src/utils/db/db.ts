@@ -34,6 +34,7 @@ export abstract class dataBase {
   }
 
   abstract getAmtPassword(uuid: string): Promise<string[]>; 
+  abstract getAllAmtCredentials(): Promise<{}>; 
 
   getConfig(){
     return this.config;
@@ -90,6 +91,8 @@ export abstract class dataBase {
         log.error(`Exception in IsOrgApproved: ${error}`);
     }
   }
+
+
 
   // check if a GUID is allowed to connect
   async IsGUIDApproved(guid, func) {

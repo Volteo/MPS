@@ -31,6 +31,10 @@ export default class SnowDB extends dataBase {
     }
   }
 
+  async getAllAmtCredentials() {
+    return [];
+  }
+
   async getAmtPassword(uuid: string) {
     var result = ["admin", ""];
     try {
