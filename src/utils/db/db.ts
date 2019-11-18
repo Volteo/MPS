@@ -33,27 +33,12 @@ export abstract class dataBase {
     }
   }
 
+  abstract IsGUIDApproved(guid: string, func:Function): Promise<void>; 
   abstract getAmtPassword(uuid: string): Promise<string[]>; 
   abstract getAllAmtCredentials(): Promise<{}>; 
 
   getConfig(){
     return this.config;
-  }
-
-  // Mock up code, real deployment must use proper data providers
-  async getAllGUIDS() {
-    let guids = [];
-    let guidsFilePath = path.join(__dirname, "../../private/guids.json");
-    try {
-      if (fs.existsSync(guidsFilePath)) {
-        guids = JSON.parse(await readFileAsync(guidsFilePath, "utf8"));
-      } else {
-        log.debug(`File guids.json does not exists ${guidsFilePath}`);
-      }
-    } catch (error) {
-      log.error(`Exception in getAllGUIDS: ${error}`);
-    }
-    return guids;
   }
 
   //Check: why orgs
@@ -89,28 +74,6 @@ export abstract class dataBase {
       }
     } catch (error) {
         log.error(`Exception in IsOrgApproved: ${error}`);
-    }
-  }
-
-
-
-  // check if a GUID is allowed to connect
-  async IsGUIDApproved(guid, func) {
-    try {
-      var result = false;
-      if (this.config && this.config.usewhitelist) {
-        var guids = await this.getAllGUIDS();
-        if (guids.indexOf(guid) >= 0) {
-          result = true;
-        }
-      } else {
-        result = true;
-      }
-      if (func) {
-        func(result);
-      }
-    } catch (error) {
-        log.error(`Exception in IsGUIDApproved: ${error}`);
     }
   }
 

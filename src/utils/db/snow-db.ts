@@ -13,14 +13,52 @@ export default class SnowDB extends dataBase {
     super(config, datapath)
   }
 
-  // not sure what to do about this...
+  async getAllGUIDS() {
+    try {
+      const whitelistPath = "/whitelisted"
+      var resp = await axios({
+        url: super.getConfig().snowUrl + whitelistPath,
+        auth: {
+          username: super.getConfig().snowAuthUsername,
+          password: super.getConfig().snowAuthPassword
+        }
+      });
+
+      return resp.data.result;
+    }catch(error){
+      log.error(`Exception in getAllGUIDS: ${error}`);
+    }
+
+    return [];
+  }
+
+  async IsGUIDApproved(guid, func) {
+    try {
+      var result = false;
+      if (super.getConfig() && super.getConfig().usewhitelist) {
+        var guids = await this.getAllGUIDS();
+        if (guids.indexOf(guid) >= 0) {
+          result = true;
+        }
+      } else {
+        result = true;
+      }
+      if (func) {
+        func(result);
+      }
+    } catch (error) {
+      log.error(`Exception in IsGUIDApproved: ${error}`);
+    }
+  }
+
+  // No MPS password support in SNOW yet
   async CIRAAuth(guid, username, password, func) {
     try {
       var result = false;
       // var cred = await this.getCredentialsForGuid(guid);
       // if (cred && cred.mpsuser == username && cred.mpspass == password) {
       //   result = true;
-      if (super.getConfig().useglobalmpscredentials) {
+    if (super.getConfig().useglobalmpscredentials) {
         if (super.getConfig().mpsusername == username && super.getConfig().mpspass == password) {
           result = true;
         }
@@ -32,7 +70,32 @@ export default class SnowDB extends dataBase {
   }
 
   async getAllAmtCredentials() {
-    return [];
+    try {
+      var resp = await axios({
+        url: super.getConfig().snowUrl,
+        params: {
+          guid: ""
+        },
+        auth: {
+          username: super.getConfig().snowAuthUsername,
+          password: super.getConfig().snowAuthPassword
+        }
+      });
+
+      var secret = super.getConfig().snowSecret
+
+      Object.keys(resp.data.result).map(function (key) {
+        var code = CryptoJS.AES.decrypt(resp.data.result[key].amtpass, secret);
+        var decryptedMessage = code.toString(CryptoJS.enc.Utf8);
+        resp.data.result[key].amtpass = decryptedMessage
+        return key;
+      }, 0);
+
+      return resp.data.result;
+    } catch (error){
+        log.error(`Exception in getAmtPassword: ${error}`);
+    }
+    return {};
   }
 
   async getAmtPassword(uuid: string) {
@@ -49,7 +112,7 @@ export default class SnowDB extends dataBase {
         }
       });
 
-      var code = CryptoJS.AES.decrypt(resp.data.result.pwd, super.getConfig().snowSecret);
+      var code = CryptoJS.AES.decrypt(resp.data.result[uuid].amtpass, super.getConfig().snowSecret);
       var decryptedMessage = code.toString(CryptoJS.enc.Utf8);
 
       if (resp) {

@@ -29,7 +29,7 @@ export default class LocalDB extends dataBase {
         log.debug(`File credentials.json does not exists ${credentialsFilePath}`);
       }
     } catch (error) {
-        log.error(`Exception in getAllCredentials: ${error}`);
+      log.error(`Exception in getAllCredentials: ${error}`);
       return {};
     }
     return credentials;
@@ -40,7 +40,7 @@ export default class LocalDB extends dataBase {
     try {
       credentials = await this.getAllCredentials();
     } catch (error) {
-        log.error(`Exception in getCredentialsForGuid: ${error}`);
+      log.error(`Exception in getCredentialsForGuid: ${error}`);
       credentials = {};
     }
     return credentials[guid];
@@ -53,8 +53,44 @@ export default class LocalDB extends dataBase {
       // logger.debug(`All AMT credentials: ${JSON.stringify(cred, null, 4)}`);
       return cred;
     } catch (error) {
-        log.error(`Exception in getAllAmtCredentials: ${error}`);
+      log.error(`Exception in getAllAmtCredentials: ${error}`);
       return {};
+    }
+  }
+
+  // Mock up code, real deployment must use proper data providers
+  async getAllGUIDS() {
+    let guids = [];
+    let guidsFilePath = path.join(__dirname, "../../private/guids.json");
+    try {
+      if (fs.existsSync(guidsFilePath)) {
+        guids = JSON.parse(await readFileAsync(guidsFilePath, "utf8"));
+      } else {
+        log.debug(`File guids.json does not exists ${guidsFilePath}`);
+      }
+    } catch (error) {
+      log.error(`Exception in getAllGUIDS: ${error}`);
+    }
+    return guids;
+  }
+
+  // check if a GUID is allowed to connect
+  async IsGUIDApproved(guid, func) {
+    try {
+      var result = false;
+      if (super.getConfig() && super.getConfig().usewhitelist) {
+        var guids = await this.getAllGUIDS();
+        if (guids.indexOf(guid) >= 0) {
+          result = true;
+        }
+      } else {
+        result = true;
+      }
+      if (func) {
+        func(result);
+      }
+    } catch (error) {
+      log.error(`Exception in IsGUIDApproved: ${error}`);
     }
   }
 
@@ -72,7 +108,7 @@ export default class LocalDB extends dataBase {
       }
       if (func) func(result);
     } catch (error) {
-        log.error(`Exception in CIRAAuth: ${error}`);
+      log.error(`Exception in CIRAAuth: ${error}`);
     }
   }
 
@@ -84,7 +120,7 @@ export default class LocalDB extends dataBase {
         result = [amtcreds.amtuser, amtcreds.amtpass];
       }
     } catch (error) {
-        log.error(`Exception in getAmtPassword: ${error}`);
+      log.error(`Exception in getAmtPassword: ${error}`);
     }
     return result;
   }
