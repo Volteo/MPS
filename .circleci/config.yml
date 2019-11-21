@@ -1,0 +1,22 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@6.5.0
+
+jobs:
+  release:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run bump-version
+
+workflows:
+  build_and_push_image:
+    jobs:
+      - release
+      - aws-ecr/build-and-push-image:
+          repo: inteloob/mps
+          tag: 'latest'
+          create-repo: true
