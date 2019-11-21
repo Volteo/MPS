@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - run: npm install
-      - run: npm bump-version
+      - run: npm run bump-version
 
 workflows:
   build_and_push_image:
