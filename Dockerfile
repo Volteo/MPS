@@ -9,6 +9,7 @@ WORKDIR /mps-microservice
 COPY package*.json ./
 COPY --from=builder /dist ./dist
 COPY /public ./public
+COPY /agent ./agent
 RUN npm install --only=production
 
 EXPOSE 4433
