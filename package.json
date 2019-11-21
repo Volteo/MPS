@@ -32,7 +32,7 @@
     "typescript": "^3.3.3"
   },
   "release": {
-    "branch": "circleci",
+    "branch": "master",
     "plugins": [
       "@semantic-release/commit-analyzer",
       [
