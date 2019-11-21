@@ -7,6 +7,6 @@ workflows:
   build_and_push_image:
     jobs:
       - aws-ecr/build-and-push-image:
-          repo: inteloob/MPS
+          repo: inteloob/mps
           tag: 'latest'
           create-repo: true
