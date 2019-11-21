@@ -1,0 +1,12 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@6.5.0
+
+workflows:
+  build_and_push_image:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          repo: inteloob/MPS
+          tag: 'latest'
+          create-repo: true

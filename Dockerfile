@@ -1,10 +1,16 @@
-FROM node:10-alpine
-WORKDIR /mps-microservice
-
-COPY package*.json ./
-RUN npm install
+FROM node:10.16 AS builder
 
 COPY . .
+RUN npm install
+RUN npm run compile
+
+FROM node:10.16.0-alpine
+WORKDIR /mps-microservice
+COPY package*.json ./
+COPY --from=builder /dist ./dist
+COPY /public ./public
+RUN npm install --only=production
+
 EXPOSE 4433
 EXPOSE 3000
-CMD [ "npm", "start" ]
+CMD [ "node", "./dist/index.js" ]
