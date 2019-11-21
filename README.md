@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/Volteo/MPS/tree/master.svg?style=svg)](https://circleci.com/gh/Volteo/MPS/tree/master)
+
 For detailed documentation , browse to [docs](https://open-amt-cloud-toolkit.github.io/MPS/)
 
 Running from Docker
