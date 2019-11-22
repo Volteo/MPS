@@ -20,11 +20,15 @@ workflows:
           repo: inteloob/mps
           tag: 'latest'
           create-repo: true
-          branches:
-            - master
+          filter:
+            branches:
+                only:
+                  - master
       - aws-ecr/build-and-push-image:
           repo: inteloob/volteomps
           tag: 'latest'
           create-repo: true
-          branches:
-            - volteoMPS
+          filter:
+            branches:
+              only:
+                - volteoMPS
