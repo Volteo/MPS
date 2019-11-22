@@ -1,7 +1,11 @@
 {
-    "branch": [
+    "dryRun": true,
+    "branches": [
         "master",
-        "volteoMPS"
+        {
+            "name": "volteoMPS",
+            "prerelease": true
+        }
     ],
     "plugins": [
         "@semantic-release/commit-analyzer",
