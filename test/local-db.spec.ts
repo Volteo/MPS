@@ -5,7 +5,7 @@
 
 import 'mocha';
 import { expect } from 'chai';
-import { dataBase } from "../src/utils/db";
+import DB  from "../src/utils/db/local-db";
 
 let  config = {
     "usewhitelist" : true,
@@ -26,8 +26,9 @@ let  config = {
 }
 
 describe("Use GUID whitelisting: ", () => {
-    config.usewhitelist =  true;
-    let db = new dataBase(config,null); 
+    let conf = JSON.parse(JSON.stringify(config))
+    conf.usewhitelist =  true;
+    let db = new DB(conf,null); 
     it('Test if listed GUID is allowed', () => {   
         db.IsGUIDApproved("12345678-9abc-def1-2345-123456789000", (ret) => { 
             expect(ret).to.equal(true);
@@ -47,8 +48,9 @@ describe("Use GUID whitelisting: ", () => {
 });
 
 describe("Do not use GUID whitelisting: ", () => {
-    config.usewhitelist =  false;
-    let db = new dataBase(config,null); 
+    let conf = JSON.parse(JSON.stringify(config))
+    conf.usewhitelist =  false;
+    let db = new DB(conf,null); 
     it('Test if listed GUID is allowed', () => {   
         db.IsGUIDApproved("12345678-9abc-def1-2345-123456789000", (ret) => { 
             expect(ret).to.equal(true);
