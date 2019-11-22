@@ -20,7 +20,7 @@ workflows:
           repo: inteloob/mps
           tag: 'latest'
           create-repo: true
-          filter:
+          filters:
             branches:
                 only:
                   - master
@@ -28,7 +28,7 @@ workflows:
           repo: inteloob/volteomps
           tag: 'latest'
           create-repo: true
-          filter:
+          filters:
             branches:
               only:
                 - volteoMPS

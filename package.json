@@ -1,6 +1,6 @@
 {
   "name": "mps",
-  "version": "0.0.9",
+  "version": "0.0.1",
   "description": "Containerized MPS service",
   "scripts": {
     "build": "tsc --w",
@@ -27,21 +27,8 @@
     "chai-http": "^4.3.0",
     "mocha": "^5.2.0",
     "mochawesome": "^3.1.1",
-    "semantic-release": "^15.13.31",
+    "semantic-release": "16.0.0-beta.33",
     "ts-node": "^8.1.0",
     "typescript": "^3.3.3"
-  },
-  "release": {
-    "branch": "master",
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      [
-        "@semantic-release/npm",
-        {
-          "npmPublish": false
-        }
-      ],
-      "@semantic-release/github"
-    ]
   }
 }
