@@ -1,5 +1,8 @@
 {
+<<<<<<< HEAD
     "dryRun": true,
+=======
+>>>>>>> 214b0afe4087d9107a96bb286d5e7d6c7fef53da
     "branches": [
         "master",
         {
