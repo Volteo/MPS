@@ -39,7 +39,7 @@ workflows:
     jobs:
       - start-notify
       - release
-      - aws-ecr/build-and-push-image:
+      - aws-ecr/build-and-push-image_master:
           requires: 
             - release
           repo: inteloob/mps
@@ -49,7 +49,10 @@ workflows:
             branches:
                 only:
                   - master
-      - aws-ecr/build-and-push-image:
+      - end-notify:
+          requires: 
+            - aws-ecr/build-and-push-image_master
+      - aws-ecr/build-and-push-image_volteo:
           requires: 
             - release
           repo: inteloob/volteomps
@@ -59,7 +62,10 @@ workflows:
             branches:
               only:
                 - volteoMPS
-      - aws-ecr/build-and-push-image:
+      - end-notify:
+          requires: 
+            - aws-ecr/build-and-push-image_volteo
+      - aws-ecr/build-and-push-image_test:
           requires: 
             - release
           repo: inteloob/volteoTest
@@ -71,4 +77,4 @@ workflows:
                 - volteoTEST
       - end-notify:
           requires: 
-            - aws-ecr/build-and-push-image
+            - aws-ecr/build-and-push-image_test
