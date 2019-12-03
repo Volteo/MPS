@@ -27,16 +27,6 @@ jobs:
           mentions: 'channel'
           message: We just start a new building!
           webhook: ${SLACK_WEBHOOK}
-  slack-status:
-    executor: principal-executor
-    steps:
-      - slack/status:
-          color: '#228B22'
-          mentions: 'channel'
-          title: Job Complete.
-          include_visit_job_action: false
-          include_job_number_field: false
-          webhook: ${SLACK_WEBHOOK}
       
 workflows:
   build_and_push_image:
@@ -67,7 +57,7 @@ workflows:
           requires: 
             - release
           repo: inteloob/volteoTest
-          tag: 'latest,${RELEASE_VERSION}'
+          tag: "${RELEASE_VERSION}"
           create-repo: true
           filters:
             branches:
