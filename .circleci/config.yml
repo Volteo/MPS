@@ -23,7 +23,7 @@ jobs:
           color: '#228B22'
           mentions: 'channel'
           title: Job completed.
-          message: Success deploy! Version ${RELEASE_VERSION}
+          message: Success deploy! Version "${RELEASE_VERSION}"
           include_visit_job_action: false
           include_job_number_field: false
           webhook: ${SLACK_WEBHOOK}
