@@ -56,7 +56,7 @@ workflows:
       - aws-ecr/build-and-push-image:
           requires: 
             - release
-          repo: inteloob/volteoTest
+          repo: inteloob/volteotest
           tag: "${RELEASE_VERSION}"
           create-repo: true
           filters:
