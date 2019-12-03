@@ -7,7 +7,7 @@ executors:
 
 orbs:
   aws-ecr: circleci/aws-ecr@6.5.0
-  slack: circleci/slack@3.4.0
+  slack: circleci/slack@3.4.1
 
 jobs:
   release:
@@ -19,14 +19,6 @@ jobs:
       - run: |
             RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)
             echo $RELEASE_VERSION
-      - slack/notify:
-          color: '#228B22'
-          mentions: 'channel'
-          title: Job completed.
-          message: Success deploy! Version "${RELEASE_VERSION}"
-          include_visit_job_action: false
-          include_job_number_field: false
-          webhook: ${SLACK_WEBHOOK}
   start-notify:
     executor: principal-executor
     steps:
@@ -34,6 +26,16 @@ jobs:
           color: '#0000FF'
           mentions: 'channel'
           message: We just start a new building!
+          webhook: ${SLACK_WEBHOOK}
+  slack-status:
+    executor: principal-executor
+    steps:
+      - slack/status:
+          color: '#228B22'
+          mentions: 'channel'
+          title: Job Complete.
+          include_visit_job_action: false
+          include_job_number_field: false
           webhook: ${SLACK_WEBHOOK}
       
 workflows:
