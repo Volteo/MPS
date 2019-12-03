@@ -19,6 +19,14 @@ jobs:
       - run: |
             RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)
             echo $RELEASE_VERSION
+      - slack/notify:
+          color: '#228B22'
+          mentions: 'channel'
+          title: Job completed.
+          message: Success deploy! Version ${RELEASE_VERSION}
+          include_visit_job_action: false
+          include_job_number_field: false
+          webhook: ${SLACK_WEBHOOK}
   start-notify:
     executor: principal-executor
     steps:
@@ -27,24 +35,13 @@ jobs:
           mentions: 'channel'
           message: We just start a new building!
           webhook: ${SLACK_WEBHOOK}
-  end-notify:
-    executor: principal-executor
-    steps:
-      - slack/notify:
-          color: '#228B22'
-          mentions: 'channel'
-          title: Job completed.
-          message: Success deploy!
-          include_visit_job_action: false
-          include_job_number_field: false
-          webhook: ${SLACK_WEBHOOK}
-
+      
 workflows:
   build_and_push_image:
     jobs:
       - start-notify
       - release
-      - aws-ecr/build-and-push-image_master:
+      - aws-ecr/build-and-push-image:
           requires: 
             - release
           repo: inteloob/mps
@@ -54,10 +51,7 @@ workflows:
             branches:
                 only:
                   - master
-      - end-notify:
-          requires: 
-            - aws-ecr/build-and-push-image_master
-      - aws-ecr/build-and-push-image_volteo:
+      - aws-ecr/build-and-push-image:
           requires: 
             - release
           repo: inteloob/volteomps
@@ -67,10 +61,7 @@ workflows:
             branches:
               only:
                 - volteoMPS
-      - end-notify:
-          requires: 
-            - aws-ecr/build-and-push-image_volteo
-      - aws-ecr/build-and-push-image_test:
+      - aws-ecr/build-and-push-image:
           requires: 
             - release
           repo: inteloob/volteoTest
@@ -80,6 +71,3 @@ workflows:
             branches:
               only:
                 - volteoTEST
-      - end-notify:
-          requires: 
-            - aws-ecr/build-and-push-image_test
