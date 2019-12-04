@@ -33,7 +33,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/cci-mps/workspace
-      - run: cat workspace/new-env-vars >> $BASH_ENV
       - aws-ecr/build-and-push-image:
           repo: inteloob/mps
           tag: 'latest'
@@ -43,7 +42,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/cci-mps/workspace
-      - run: cat workspace/new-env-vars >> $BASH_ENV
       - aws-ecr/build-and-push-image:
           repo: inteloob/volteomps
           tag: 'latest'
@@ -53,7 +51,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/cci-mps/workspace
-      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - run: cat /tmp/cci-mps/workspace/new-env-vars >> $BASH_ENV
       - aws-ecr/build-and-push-image:
           repo: inteloob/volteotest
           tag: "latest,${RELEASE_VERSION}"
