@@ -1,5 +1,7 @@
 version: 2.1
 
+working_directory: /tmp/cci-mps
+
 executors:
   principal-executor:
     docker:
@@ -16,8 +18,10 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run bump-version
+      - run: echo "export BOB=$BAZ" >> workspace/new-env-vars
+      - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: |
-            RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)
+            export RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)
             echo $RELEASE_VERSION
   start-notify:
     executor: principal-executor
