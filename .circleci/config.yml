@@ -16,7 +16,7 @@ jobs:
     executor: principal-executor
     steps:
       - checkout:
-          path: ~/tmp/cci-mps
+          path: /tmp/cci-mps
       - run: |
           pwd
           ls
