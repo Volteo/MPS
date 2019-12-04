@@ -1,12 +1,12 @@
 version: 2.1
 
 defaults: &defaults
-  working_directory: /tmp/cci-mps
 
 executors:
   principal-executor:
     docker:
       - image: circleci/node:10
+    working_directory: /tmp/cci-mps
 
 orbs:
   aws-ecr: circleci/aws-ecr@6.5.0
