@@ -58,11 +58,12 @@ jobs:
           at: /tmp/cci-mps/workspace
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - aws-ecr/build-and-push-image:
+          attach-workspace: true
+          workspace-root: ~\
           checkout: false
           repo: inteloob/volteotest
           tag: "latest,${RELEASE_VERSION}"
           create-repo: true
-          workspace-root: ~\
       
 workflows:
   build_and_push_image:
