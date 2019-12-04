@@ -59,7 +59,7 @@ workflows:
           requires: 
             - release
           repo: inteloob/volteotest
-          tag: "latest,${RELEASE_VERSION}"
+          tag: "latest,1.0.0"
           create-repo: true
           filters:
             branches:
