@@ -22,6 +22,8 @@ jobs:
       - run: npm run bump-version
       - run: mkdir -p workspace
       - run: echo "export RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)" >> workspace/new-env-vars
+      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - run: echo ${RELEASE_VERSION:-NULL}
       - persist_to_workspace:
           root: workspace
           paths:
