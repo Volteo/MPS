@@ -12,9 +12,10 @@ orbs:
 
 jobs:
   release:
+    working_directory: /tmp/cci-mps
     executor: principal-executor
     steps:
-      - checkout >> tmp/cci-mps
+      - checkout
       - run: npm install
       - run: npm run bump-version
       - run: mkdir -p workspace
