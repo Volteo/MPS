@@ -1,7 +1,5 @@
 version: 2.1
 
-defaults: &defaults
-
 executors:
   principal-executor:
     docker:
@@ -14,7 +12,6 @@ orbs:
 
 jobs:
   release:
-    <<: *defaults
     executor: principal-executor
     steps:
       - checkout
@@ -37,7 +34,6 @@ jobs:
           message: We just start a new building!
           webhook: ${SLACK_WEBHOOK}
   ecr-push_master:
-    <<: *defaults
     executor: principal-executor
     steps:
       - attach_workspace:
@@ -47,7 +43,6 @@ jobs:
           tag: 'latest'
           create-repo: true
   ecr-push_volteomps:
-    <<: *defaults
     executor: principal-executor
     steps:
       - attach_workspace:
@@ -57,7 +52,6 @@ jobs:
           tag: 'latest'
           create-repo: true
   ecr-push_volteotest:
-    <<: *defaults
     executor: principal-executor
     steps:
       - attach_workspace:
