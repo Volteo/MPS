@@ -14,7 +14,7 @@ jobs:
   release:
     executor: principal-executor
     steps:
-      - checkout
+      - checkout >> tmp/cci-mps
       - run: npm install
       - run: npm run bump-version
       - run: mkdir -p workspace
