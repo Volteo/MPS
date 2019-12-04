@@ -61,6 +61,7 @@ jobs:
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: echo ${RELEASE_VERSION:-NULL}
       - aws-ecr/build-and-push-image:
+          attach_workspace: true
           checkout: false
           repo: inteloob/volteotest
           tag: "latest,${RELEASE_VERSION}"
