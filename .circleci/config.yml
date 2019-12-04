@@ -18,8 +18,6 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run bump-version
-      - run: echo "export BOB=$BAZ" >> workspace/new-env-vars
-      - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: |
             export RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)
             echo $RELEASE_VERSION
