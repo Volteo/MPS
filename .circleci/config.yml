@@ -18,9 +18,8 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run bump-version
-      - run: |
-            export RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1) >> $BASH_ENV
-            echo $RELEASE_VERSION
+      - run: mkdir -p workspace
+      - run: echo "export RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)" >> workspace/new-env-vars
   start-notify:
     executor: principal-executor
     steps:
@@ -29,38 +28,59 @@ jobs:
           mentions: 'channel'
           message: We just start a new building!
           webhook: ${SLACK_WEBHOOK}
+  ecr-push_master:
+    executor: principal-executor
+    steps:
+      - attach_workspace:
+          at: /tmp/cci-mps/workspace
+      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - aws-ecr/build-and-push-image:
+          repo: inteloob/mps
+          tag: 'latest'
+          create-repo: true
+  ecr-push_volteomps:
+    executor: principal-executor
+    steps:
+      - attach_workspace:
+          at: /tmp/cci-mps/workspace
+      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - aws-ecr/build-and-push-image:
+          repo: inteloob/volteomps
+          tag: 'latest'
+          create-repo: true
+  ecr-push_volteotest:
+    executor: principal-executor
+    steps:
+      - attach_workspace:
+          at: /tmp/cci-mps/workspace
+      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - aws-ecr/build-and-push-image:
+          repo: inteloob/volteotest
+          tag: "latest,${RELEASE_VERSION}"
+          create-repo: true
       
 workflows:
   build_and_push_image:
     jobs:
       - start-notify
       - release
-      - aws-ecr/build-and-push-image:
+      - ecr-push_master:
           requires: 
             - release
-          repo: inteloob/mps
-          tag: 'latest'
-          create-repo: true
           filters:
             branches:
                 only:
                   - master
-      - aws-ecr/build-and-push-image:
+      - ecr-push_volteomps:
           requires: 
             - release
-          repo: inteloob/volteomps
-          tag: 'latest'
-          create-repo: true
           filters:
             branches:
               only:
                 - volteoMPS
-      - aws-ecr/build-and-push-image:
+      - ecr-push_volteotest:
           requires: 
             - release
-          repo: inteloob/volteotest
-          tag: "latest,1.0.0"
-          create-repo: true
           filters:
             branches:
               only:
