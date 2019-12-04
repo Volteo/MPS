@@ -19,7 +19,7 @@ jobs:
       - run: npm install
       - run: npm run bump-version
       - run: |
-            export RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)
+            export RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1) >> $BASH_ENV
             echo $RELEASE_VERSION
   start-notify:
     executor: principal-executor
@@ -59,7 +59,7 @@ workflows:
           requires: 
             - release
           repo: inteloob/volteotest
-          tag: "${RELEASE_VERSION}"
+          tag: "latest,${RELEASE_VERSION}"
           create-repo: true
           filters:
             branches:
