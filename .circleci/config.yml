@@ -57,6 +57,7 @@ jobs:
       - attach_workspace:
           at: /tmp/cci-mps/workspace
       - run: cat workspace/new-env-vars >> $BASH_ENV
+      - run: echo ${RELEASE_VERSION}
       - aws-ecr/build-and-push-image:
           attach-workspace: true
           workspace-root: ~\
