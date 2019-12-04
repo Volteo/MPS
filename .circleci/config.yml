@@ -13,6 +13,7 @@ orbs:
 
 jobs:
   release:
+    <<: *defaults
     executor: principal-executor
     steps:
       - checkout
@@ -20,6 +21,10 @@ jobs:
       - run: npm run bump-version
       - run: mkdir -p workspace
       - run: echo "export RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)" >> workspace/new-env-vars
+      - persist_to_workspace:
+          root: workspace
+          paths:
+              - new-env-vars
   start-notify:
     executor: principal-executor
     steps:
@@ -51,7 +56,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/cci-mps/workspace
-      - run: cat /tmp/cci-mps/workspace/new-env-vars >> $BASH_ENV
+      - run: cat /workspace/new-env-vars >> $BASH_ENV
       - aws-ecr/build-and-push-image:
           repo: inteloob/volteotest
           tag: "latest,${RELEASE_VERSION}"
