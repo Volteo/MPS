@@ -15,8 +15,9 @@ jobs:
     working_directory: /tmp/cci-mps
     executor: principal-executor
     steps:
+      - run: ls
       - checkout:
-          path: /tmp/cci-mps
+          path: ~/tmp/cci-mps
       - run: npm install
       - run: npm run bump-version
       - run: mkdir -p workspace
@@ -56,10 +57,12 @@ jobs:
   ecr-push_volteotest:
     executor: principal-executor
     steps:
+      - run: ls
       - attach_workspace:
           at: /tmp/cci-mps/workspace
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: echo ${RELEASE_VERSION}
+      - run: ls
       - aws-ecr/build-and-push-image:
           attach-workspace: true
           workspace-root: ~\
