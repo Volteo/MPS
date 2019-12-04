@@ -16,8 +16,8 @@ jobs:
     executor: principal-executor
     steps:
       - run: |
-        pwd
-        ls
+          pwd
+          ls
       - checkout:
           path: ~/tmp/cci-mps
       - run: npm install
@@ -60,15 +60,15 @@ jobs:
     executor: principal-executor
     steps:
       - run: |
-        pwd
-        ls
+          pwd
+          ls
       - attach_workspace:
           at: /tmp/cci-mps/workspace
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: echo ${RELEASE_VERSION}
       - run: |
-        pwd
-        ls
+          pwd
+          ls
       - aws-ecr/build-and-push-image:
           attach-workspace: true
           workspace-root: ~\
