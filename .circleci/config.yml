@@ -14,8 +14,7 @@ jobs:
   release:
     executor: principal-executor
     steps:
-      - checkout:
-        path: /tmp/cci-mps
+      - checkout
       - run: npm install
       - run: npm run bump-version
       - run: mkdir -p workspace
@@ -26,6 +25,8 @@ jobs:
           root: workspace
           paths:
               - new-env-vars
+      - store_artifacts:
+          path: /tmp/cci-mps
   start-notify:
     executor: principal-executor
     steps:
