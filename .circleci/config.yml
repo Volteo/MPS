@@ -1,6 +1,7 @@
 version: 2.1
 
-working_directory: /tmp/cci-mps
+defaults: &defaults
+  working_directory: /tmp/cci-mps
 
 executors:
   principal-executor:
@@ -34,6 +35,7 @@ jobs:
           message: We just start a new building!
           webhook: ${SLACK_WEBHOOK}
   ecr-push_master:
+    <<: *defaults
     executor: principal-executor
     steps:
       - attach_workspace:
@@ -43,6 +45,7 @@ jobs:
           tag: 'latest'
           create-repo: true
   ecr-push_volteomps:
+    <<: *defaults
     executor: principal-executor
     steps:
       - attach_workspace:
@@ -52,6 +55,7 @@ jobs:
           tag: 'latest'
           create-repo: true
   ecr-push_volteotest:
+    <<: *defaults
     executor: principal-executor
     steps:
       - attach_workspace:
