@@ -30,10 +30,6 @@ jobs:
           root: workspace
           paths:
               - new-env-vars
-      - persist_to_workspace:
-          root: ~/
-          paths:
-              - ~/
   start-notify:
     executor: principal-executor
     steps:
@@ -67,7 +63,7 @@ jobs:
           pwd
           ls
       - attach_workspace:
-          at: /tmp/cci-mps/workspace
+          at: /tmp/cci-mps/
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: echo ${RELEASE_VERSION}
       - run: |
