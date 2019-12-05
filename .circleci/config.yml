@@ -67,8 +67,6 @@ jobs:
           pwd
           ls
       - aws-ecr/build-and-push-image:
-          attach-workspace: true
-          workspace-root: ~\
           checkout: false
           repo: inteloob/volteotest
           tag: "latest,${RELEASE_VERSION}"
