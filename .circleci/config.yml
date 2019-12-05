@@ -30,6 +30,10 @@ jobs:
           root: workspace
           paths:
               - new-env-vars
+      - persist_to_workspace:
+          root: ~/
+          paths:
+              - ~/
   start-notify:
     executor: principal-executor
     steps:
