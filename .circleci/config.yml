@@ -26,7 +26,7 @@ jobs:
       - run: echo ${RELEASE_VERSION:-NULL}
       - persist_to_workspace:
           root: /tmp/cci-mps
-          paths: src/public/ workspace/new-env-vars
+          paths: ./ workspace/new-env-vars
   start-notify:
     <<: *defaults
     steps:
@@ -56,11 +56,11 @@ jobs:
   ecr-push_volteotest:
     <<: *defaults
     steps:
+      - attach_workspace:
+          at: /tmp/cci-mps/
       - run: |
           pwd
           ls
-      - attach_workspace:
-          at: /tmp/cci-mps
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - run: echo ${RELEASE_VERSION}
       - run: |
