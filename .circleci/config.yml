@@ -55,18 +55,6 @@ jobs:
           repo: inteloob/volteomps
           tag: "latest,${RELEASE_VERSION}"
           create-repo: true
-  ecr-push_volteotest:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: /tmp/cci-mps/
-      - run: cat workspace/new-env-vars >> $BASH_ENV
-      - aws-ecr/build-and-push-image:
-          setup-remote-docker: true
-          checkout: false
-          repo: inteloob/volteotest
-          tag: "latest,${RELEASE_VERSION}"
-          create-repo: true
       
 workflows:
   build_and_push_image:
@@ -87,10 +75,3 @@ workflows:
             branches:
               only:
                 - volteoMPS
-      - ecr-push_volteotest:
-          requires: 
-            - release
-          filters:
-            branches:
-              only:
-                - volteoTest
