@@ -35,19 +35,25 @@ jobs:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: /tmp/cci-mps/workspace
+          at: /tmp/cci-mps/
+      - run: cat workspace/new-env-vars >> $BASH_ENV
       - aws-ecr/build-and-push-image:
+          setup-remote-docker: true
+          checkout: false
           repo: inteloob/mps
-          tag: 'latest'
+          tag: "latest,${RELEASE_VERSION}"
           create-repo: true
   ecr-push_volteomps:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: /tmp/cci-mps/workspace
+          at: /tmp/cci-mps/
+      - run: cat workspace/new-env-vars >> $BASH_ENV
       - aws-ecr/build-and-push-image:
+          setup-remote-docker: true
+          checkout: false
           repo: inteloob/volteomps
-          tag: 'latest'
+          tag: "latest,${RELEASE_VERSION}"
           create-repo: true
   ecr-push_volteotest:
     <<: *defaults
