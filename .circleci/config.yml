@@ -18,7 +18,7 @@ jobs:
       - run: npm install
       - run: npm run bump-version
       - run: mkdir -p workspace
-      - run: echo "export RELEASE_VERSION_BRANCH=$(git tag | sort -V | tail -1 "")" >> workspace/new-env-vars
+      - run: echo "export RELEASE_VERSION_BRANCH=$(git tag | sort -V | tail -1)" >> workspace/new-env-vars
       - run: echo "export RELEASE_VERSION=${RELEASE_VERSION_BRANCH/@volteoMPS/$""}" >> workspace/new-env-vars
       - run: cat workspace/new-env-vars >> $BASH_ENV
       - persist_to_workspace:
