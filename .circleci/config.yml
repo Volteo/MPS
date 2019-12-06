@@ -1,62 +1,76 @@
 version: 2.1
 
-executors:
-  principal-executor:
-    docker:
-      - image: circleci/node:10
+defaults: &defaults
+  docker:
+    - image: circleci/node:10
+  working_directory: /tmp/cci-mps
 
 orbs:
   aws-ecr: circleci/aws-ecr@6.5.0
-  slack: circleci/slack@3.4.0
+  slack: circleci/slack@3.4.1
 
 jobs:
   release:
-    executor: principal-executor
+    <<: *defaults
     steps:
-      - checkout
+      - checkout:
+          path: /tmp/cci-mps
       - run: npm install
       - run: npm run bump-version
-      - run: |
-            RELEASE_VERSION=$(git tag --sort=committerdate | grep -E '^[0-9]' | tail -1)
-            echo $RELEASE_VERSION
-      - slack/notify:
-          color: '#228B22'
-          mentions: 'channel'
-          title: Job completed.
-          message: Success deploy! Version ${RELEASE_VERSION}
-          include_visit_job_action: false
-          include_job_number_field: false
-          webhook: ${SLACK_WEBHOOK}
+      - run: mkdir -p workspace
+      - run: echo "export RELEASE_VERSION=$(git tag | sort -V | tail -1)" >> workspace/new-env-vars
+      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - persist_to_workspace:
+          root: /tmp/cci-mps
+          paths: ./ workspace/new-env-vars
   start-notify:
-    executor: principal-executor
+    <<: *defaults
     steps:
       - slack/notify:
           color: '#0000FF'
           mentions: 'channel'
           message: We just start a new building!
           webhook: ${SLACK_WEBHOOK}
+  ecr-push_master:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /tmp/cci-mps/
+      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - aws-ecr/build-and-push-image:
+          setup-remote-docker: true
+          checkout: false
+          repo: inteloob/mps
+          tag: "latest,${RELEASE_VERSION}"
+          create-repo: true
+  ecr-push_volteomps:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /tmp/cci-mps/
+      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - aws-ecr/build-and-push-image:
+          setup-remote-docker: true
+          checkout: false
+          repo: inteloob/volteomps
+          tag: "latest,${RELEASE_VERSION}"
+          create-repo: true
       
 workflows:
   build_and_push_image:
     jobs:
       - start-notify
       - release
-      - aws-ecr/build-and-push-image:
+      - ecr-push_master:
           requires: 
             - release
-          repo: inteloob/mps
-          tag: 'latest'
-          create-repo: true
           filters:
             branches:
                 only:
                   - master
-      - aws-ecr/build-and-push-image:
+      - ecr-push_volteomps:
           requires: 
             - release
-          repo: inteloob/volteomps
-          tag: 'latest'
-          create-repo: true
           filters:
             branches:
               only:
