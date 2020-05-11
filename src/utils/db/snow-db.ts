@@ -73,9 +73,7 @@ export default class SnowDB extends dataBase {
     try {
       var resp = await axios({
         url: super.getConfig().snowUrl,
-        params: {
-          guid: ""
-        },
+
         auth: {
           username: super.getConfig().snowAuthUsername,
           password: super.getConfig().snowAuthPassword
