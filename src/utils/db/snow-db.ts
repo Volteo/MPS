@@ -116,7 +116,7 @@ export default class SnowDB extends dataBase {
       var decryptedMessage = code.toString(CryptoJS.enc.Utf8);
 
       if (resp) {
-        result = [resp.data.result.user, decryptedMessage];
+        result = [resp.data.result[uuid].amtuser, decryptedMessage];
       }
     } catch (error) {
       log.error(`Exception in getAmtPassword: ${error}`);
