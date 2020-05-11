@@ -17,7 +17,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "crypto-random-string": "^3.0.1",
-    "express": "^4.17.1",
+    "axios": "^0.19.0",
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.17.0",
     "express-ws": "^4.0.0",
     "filereader": "^0.10.3",
     "md5": "^2.2.1",
